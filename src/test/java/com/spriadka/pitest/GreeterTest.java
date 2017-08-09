@@ -13,13 +13,36 @@ public class GreeterTest {
     private static final String SEPARATOR = System.getProperty("line.separator");
 
     @Test
-    public void test(){
+    public void testSayHello(){
         final String name = "Simon Priadka";
-        greeter = new Greeter(name);
         ByteOutputStream outputStream = new ByteOutputStream();
         PrintStream stream = new PrintStream(outputStream);
         System.setOut(stream);
-        greeter.sayHello(stream);
+        greeter = new Greeter(name).withOutstream(stream);
+        greeter.greet();
         Assert.assertEquals(name + SEPARATOR,outputStream.toString());
+    }
+
+    @Test
+    public void testGetNameEmpty(){
+        Assert.assertEquals("",new Greeter("").getName());
+    }
+
+    @Test
+    public void testGetName(){
+        final String name = "Vladimir Putin";
+        greeter = new Greeter(name);
+        Assert.assertEquals(name,greeter.getName());
+    }
+
+    @Test
+    public void testScreamName() {
+        final String name = "Donald Trump";
+        ByteOutputStream outputStream = new ByteOutputStream();
+        PrintStream stream = new PrintStream(outputStream);
+        System.setOut(stream);
+        greeter = new Greeter(name).withOutstream(stream);
+        greeter.screamName();
+        Assert.assertEquals(String.format("%s!", name.toUpperCase()),outputStream.toString());
     }
 }
